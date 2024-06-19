@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import "../App.css";
 import  tokenList from "../tokenList.json";
+import axios from "axios";
 
 const Swap = () => {
   const [tokenOneAmmount, setTokenOneAmmount] = useState(null);
@@ -32,6 +33,24 @@ const Swap = () => {
     setChangeTokens(asset);
     setIsOpen(true);
   }
+
+  function getPrice(){
+    axios.get(`http://localhost:3000/tokenPrice?addressOne=${tokenOne.address}&addressTwo=${tokenTwo.address}`)
+    .then((response)=>{
+      console.log(response.data);
+      setTokenTwoAmmount(parseFloat((tokenOneAmmount * response.data.ratio).toFixed(2)));
+    })
+    .catch((error)=>{
+      console.log(error);
+      message.error('Error fetching data');
+    })
+  }
+
+  useEffect(() => {
+    if (tokenOneAmmount) {
+      getPrice();
+    }
+  }, [tokenOneAmmount, tokenOne, tokenTwo]);
   const setting = (
     <div className="flex flex-col gap-3 p-3">
       <div className="flex-col items-center font-semibold">
