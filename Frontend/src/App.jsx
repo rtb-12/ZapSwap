@@ -7,6 +7,7 @@ import {Routes, Route} from 'react-router-dom'
 import { injected } from 'wagmi/connectors'
 import {  useConnect, useAccount } from 'wagmi'
 
+
 function App() {
   const { connect } = useConnect()
   const { address, isConnected } = useAccount()
