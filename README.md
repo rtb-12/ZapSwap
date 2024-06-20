@@ -2,6 +2,10 @@
 
 ZapSwap is a decentralized exchange (DEX) application where users can connect their MetaMask wallet and exchange their tokens. The application leverages the 1inch aggregator for optimized token swaps. This repository contains two main folders: `backend` (Node.js) and `frontend` (React).
 
+
+![Screenshot from 2024-06-21 00-30-31](https://github.com/rtb-12/ZapSwap/assets/147048280/d74ed46d-3e42-4a89-8da7-bfaf6d654021)
+
+
 ## Tech Stack
 
 - **Frontend**: React, wagmi , Ant Design Icons
