@@ -26,6 +26,8 @@ const Swap = (props) => {
     value: null,
   });
 
+  const [errorBalance, setErrorBalance] = useState(null);
+
   const { data, sendTransaction } = useSendTransaction({
     request: {
       from: address,
@@ -65,17 +67,22 @@ async function fetchSwap(tokenOne, tokenTwo, tokenOneAmount, address, slippage) 
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.error("error during swap ", error);
+    if (error.response && error.response.status === 400) {
+      setErrorBalance('Not enough balance to perform the transaction');
+    }
   }
 }
 
   async function fetchDexSwap() {
+    const delay = ms => new Promise(res => setTimeout(res, ms));
     const allowance = await fetchAllowance(tokenOne, address);
+    await delay(1000);
     // console.log(allowance);
 
     if (allowance === "0") {
       const approve = await fetchApproveTransaction(tokenOne);
-
+      await delay(1000);
       setTxDetails(approve.data);
       console.log("not approved");
       return;
@@ -165,6 +172,17 @@ async function fetchSwap(tokenOne, tokenTwo, tokenOneAmount, address, slippage) 
 
 
   },[isSuccess])
+
+  useEffect(() => {
+    if (errorBalance) {
+      messageApi.destroy();
+      messageApi.open({
+        type: 'errorBalance',
+        content: errorBalance,
+        duration: 1.50,
+      });
+    }
+  }, [errorBalance]);
 
 
   const setting = (

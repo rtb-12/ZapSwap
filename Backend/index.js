@@ -107,8 +107,12 @@ app.get('/fetchSwap', async (req, res) => {
     const response = await axios.get(url, config);
     res.json(response.data);
   } catch (error) {
-    console.error('Error from 1inch API:', error.response.data);
-    res.status(500).json({ error: 'An error occurred while fetching swap details' });
+    if (error.response && error.response.data) {
+      const { statusCode, description } = error.response.data;
+      res.status(statusCode).json({ error: description });
+    } else {
+      res.status(500).json({ error: 'An unknown error occurred' });
+    }
   }
 });
 
